@@ -17,3 +17,5 @@ Pillow==9.3.0
 mixer==7.2.2
 isort==5.10.1
 djoser==2.1.0
+drf_extra_fields==3.4.1
+reportlab==3.6.12

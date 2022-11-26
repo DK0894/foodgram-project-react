@@ -125,18 +125,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'api.pagination.CustomPagination'
+    'DEFAULT_PAGINATION_CLASS': 'api.pagination.CustomPagination',
 }
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
     'SERIALIZERS': {
-        #  'user_create': 'users.serializers.UserCreateSerializer',
         'user': 'users.serializers.UserSerializer',
         'current_user': 'users.serializers.UserSerializer',
     },

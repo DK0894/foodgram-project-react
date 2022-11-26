@@ -6,7 +6,7 @@ from users.models import User
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=200)
-    measure = models.CharField(max_length=200)
+    measurement_unit = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name
@@ -37,13 +37,16 @@ class Recipe(models.Model):
         through='IngredientRecipe',
         related_name='recipes'
     )
-    tag = models.ManyToManyField(
+    tags = models.ManyToManyField(
         Tag,
         through='TagRecipe',
         related_name='tags'
     )
     cooking_time = models.IntegerField(validators=[MinValueValidator(1)])
     pub_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
 
 
 class TagRecipe(models.Model):
@@ -62,12 +65,12 @@ class TagRecipe(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['tag', 'recipe'],
-                name='unique_tag_recipe'
+                name='unique_tags_recipe'
             )
         ]
 
     def __str__(self):
-        return f'{self.tag} in {self.recipe}'
+        return f'{self.tags} in {self.recipe}'
 
 
 class IngredientRecipe(models.Model):
