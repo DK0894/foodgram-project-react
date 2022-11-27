@@ -70,7 +70,7 @@ class TagRecipe(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.tags} in {self.recipe}'
+        return f'{self.tag} in {self.recipe}'
 
 
 class IngredientRecipe(models.Model):

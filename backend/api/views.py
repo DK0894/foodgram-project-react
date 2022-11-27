@@ -10,7 +10,8 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.pagesizes import A4
 
-from recipes.models import Ingredient, Recipe, Tag, Favorite, ShoppingCart
+from recipes.models import (Ingredient, Recipe, Tag, Favorite, ShoppingCart,
+                            IngredientRecipe)
 from .filters import IngredientSearchFilter, RecipeFilter
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (TagSerializer, IngredientsSerializer,
@@ -51,37 +52,35 @@ class RecipeViewSet(viewsets.ModelViewSet):
             permission_classes=(IsAuthenticated,))
     def download_shopping_cart(self, request):
         cart_dict = {}
-        ingredients = Ingredient.objects.filter(
-            recipes__shopping_carts__user=request.user
-        ).values_list(
-            'ingredient__name', 'ingredient__measurement_unit', 'amount'
-        )
+        ingredients = IngredientRecipe.objects.filter(
+            recipe__shopping_carts__user=request.user
+        ).values('ingredient__name', 'ingredient__measurement_unit', 'amount')
         for item in ingredients:
-            name = item[0]
+            name = item['ingredient__name']
             if name not in cart_dict:
                 cart_dict[name] = {
-                    'measurement_unit': item[1],
-                    'amount': item[2]
+                    'measurement_unit': item['ingredient__measurement_unit'],
+                    'amount': item['amount']
                 }
             else:
-                cart_dict[name]['amount'] += item[2]
+                cart_dict[name]['amount'] += item['amount']
         pdfmetrics.registerFont(
-            TTFont('Handicraft', 'data/Handicraft.ttf', 'UTF-8')
+            TTFont('TNR', 'times.ttf', 'UTF-8')
         )
-        response = HttpResponse(content_type='applocation/pdf')
+        response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = (
             'attachment; filename="shopping_list.pdf"'
         )
         page = canvas.Canvas(response, pagesize=A4)
-        page.setFont('Handicraft', size=24)
+        page.setFont('TNR', size=24)
         page.setTitle('Список покупок')
         page.drawString(200, 800, 'Список покупок')
-        page.setFont('Handicraft', size=16)
+        page.setFont('TNR', size=16)
         height = 750
         for i, (name, data) in enumerate(cart_dict.items(), 1):
-            page.drawString(75, height, (f'{i}, {name} - {data["amount"]}'
+            page.drawString(75, height, (f'{i}) {name} - {data["amount"]}'
                                          f'{data["measurement_unit"]}'))
-            height -=25
+            height -= 25
         page.showPage()
         page.save()
         return response
