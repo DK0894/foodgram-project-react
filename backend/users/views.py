@@ -1,12 +1,12 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, status
+from djoser.views import UserViewSet as UVSet
+from rest_framework import status, viewsets
 from rest_framework.permissions import (IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
-from djoser.views import UserViewSet as UVSet
 
-from .models import User, Subscribe
-from .serializers import UserSerializer, SubscribeSerializer
+from .models import Subscribe, User
+from .serializers import SubscribeSerializer, UserSerializer
 
 
 class UserViewSet(UVSet):

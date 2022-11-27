@@ -1,22 +1,22 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, status
-from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
-from reportlab.pdfgen import canvas
+from recipes.models import (Favorite, Ingredient, IngredientRecipe, Recipe,
+                            ShoppingCart, Tag)
+from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 
-from recipes.models import (Ingredient, Recipe, Tag, Favorite, ShoppingCart,
-                            IngredientRecipe)
 from .filters import IngredientSearchFilter, RecipeFilter
 from .permissions import IsAuthorOrReadOnly
-from .serializers import (TagSerializer, IngredientsSerializer,
-                          RecipeListSerializer, CreateRecipeSerializer,
-                          ShoppingCartSerializer, FavoriteSerializer)
+from .serializers import (CreateRecipeSerializer, FavoriteSerializer,
+                          IngredientsSerializer, RecipeListSerializer,
+                          ShoppingCartSerializer, TagSerializer)
 
 
 class TagViewSet(viewsets.ModelViewSet):
