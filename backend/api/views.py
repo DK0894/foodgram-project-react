@@ -1,8 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from recipes.models import (Favorite, Ingredient, IngredientRecipe, Recipe,
-                            ShoppingCart, Tag)
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -17,6 +15,8 @@ from .permissions import IsAuthorOrReadOnly
 from .serializers import (CreateRecipeSerializer, FavoriteSerializer,
                           IngredientsSerializer, RecipeListSerializer,
                           ShoppingCartSerializer, TagSerializer)
+from recipes.models import (Favorite, Ingredient, IngredientRecipe, Recipe,
+                            ShoppingCart, Tag)
 
 
 class TagViewSet(viewsets.ModelViewSet):
@@ -45,8 +45,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return RecipeListSerializer
-        else:
-            return CreateRecipeSerializer
+        return CreateRecipeSerializer
 
     @action(detail=False, methods=['GET'],
             permission_classes=(IsAuthenticated,))

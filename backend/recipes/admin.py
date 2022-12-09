@@ -15,6 +15,7 @@ class TagRecipeInline(admin.TabularInline):
 
 
 class IngredientAdmin(admin.ModelAdmin):
+    inlines = (IngredientRecipeInline,)
     list_display = ('name', 'measurement_unit')
     search_fields = ('name',)
     list_filter = ('name',)
@@ -22,8 +23,9 @@ class IngredientAdmin(admin.ModelAdmin):
 
 
 class RecipeAdmin(admin.ModelAdmin):
+    inlines = (IngredientRecipeInline, TagRecipeInline)
     list_display = ('name', 'author', 'text', 'count_favorite',
-                    'cooking_time', 'pub_date', 'id')
+                    'cooking_time', 'pub_date', 'id', 'some_ingredients')
     search_fields = ('name', 'author', 'tags')
     list_filter = ('name', 'author', 'tags')
     empty_value_display = '-пусто-'
@@ -31,6 +33,10 @@ class RecipeAdmin(admin.ModelAdmin):
     def count_favorite(self, obj):
         return Favorite.objects.filter(recipe=obj).count()
     count_favorite.short_description = 'Favorite number'
+
+    def some_ingredients(self, obj):
+        return list(obj.ingredients.all())
+    some_ingredients.short_description = 'Ingredients'
 
 
 class FavoriteAdmin(admin.ModelAdmin):

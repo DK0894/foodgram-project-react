@@ -1,8 +1,8 @@
 from djoser.serializers import UserSerializer as USerializer
-from recipes.models import Recipe
 from rest_framework import serializers
 
 from .models import Subscribe, User
+from recipes.models import Recipe
 
 
 class UserSerializer(USerializer):
@@ -17,12 +17,12 @@ class UserSerializer(USerializer):
 
     def get_is_subscribed(self, obj):
         user = self.context['request'].user
-        if user.is_anonymous:
+        have_subscribe = Subscribe.objects.filter(
+            user=user, following__id=obj.id
+        ).exists()
+        if user.is_anonymous or not have_subscribe:
             return False
-        if Subscribe.objects.filter(user=user, following__id=obj.id).exists():
-            return True
-        else:
-            return False
+        return True
 
 
 class RecipeSubscribeSerializer(serializers.ModelSerializer):
