@@ -10,7 +10,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+# SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'django-insecure-svi0o58&v8#^+v-9wv5jg9(2de8qu#m@(kyjj6^h(mi*nnlctw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -71,13 +72,17 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.getenv('DB_ENGINE', default='django.db.backends.postgresql'),
-        'NAME': os.getenv('DB_NAME', default='name'),
-        'USER': os.getenv('POSTGRES_USER', default='user'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='password'),
-        'HOST': os.getenv('DB_HOST', default='host'),
-        'PORT': os.getenv('DB_PORT', default='port')
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+    # 'default': {
+    #     'ENGINE': os.getenv('DB_ENGINE', default='django.db.backends.postgresql'),
+    #     'NAME': os.getenv('DB_NAME', default='name'),
+    #     'USER': os.getenv('POSTGRES_USER', default='user'),
+    #     'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='password'),
+    #     'HOST': os.getenv('DB_HOST', default='host'),
+    #     'PORT': os.getenv('DB_PORT', default='port')
+    # }
 }
 
 

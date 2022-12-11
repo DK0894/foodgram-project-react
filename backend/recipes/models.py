@@ -97,8 +97,10 @@ class IngredientRecipe(models.Model):
         ]
 
     def __str__(self):
-        return f'The recipe {self.recipe} contains' \
-               f'{self.amount} {self.ingredient}'
+        return (
+            f'The recipe {self.recipe} contains'
+            f'{self.amount} {self.ingredient}'
+        )
 
 
 class ShoppingCart(models.Model):

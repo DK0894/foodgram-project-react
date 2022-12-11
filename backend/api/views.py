@@ -1,10 +1,6 @@
-from django.http import HttpResponse
+from django.db.models import Sum
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from reportlab.lib.pagesizes import A4
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfgen import canvas
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -15,6 +11,7 @@ from .permissions import IsAuthorOrReadOnly
 from .serializers import (CreateRecipeSerializer, FavoriteSerializer,
                           IngredientsSerializer, RecipeListSerializer,
                           ShoppingCartSerializer, TagSerializer)
+from .utils import pdf_create
 from recipes.models import (Favorite, Ingredient, IngredientRecipe, Recipe,
                             ShoppingCart, Tag)
 
@@ -50,39 +47,15 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['GET'],
             permission_classes=(IsAuthenticated,))
     def download_shopping_cart(self, request):
-        cart_dict = {}
         ingredients = IngredientRecipe.objects.filter(
             recipe__shopping_carts__user=request.user
-        ).values('ingredient__name', 'ingredient__measurement_unit', 'amount')
-        for item in ingredients:
-            name = item['ingredient__name']
-            if name not in cart_dict:
-                cart_dict[name] = {
-                    'measurement_unit': item['ingredient__measurement_unit'],
-                    'amount': item['amount']
-                }
-            else:
-                cart_dict[name]['amount'] += item['amount']
-        pdfmetrics.registerFont(
-            TTFont('TNR', 'times.ttf', 'UTF-8')
+        ).values(
+            'ingredient__name', 'ingredient__measurement_unit'
+        ).order_by('ingredient__name').annotate(
+            total_ingredients=Sum('amount')
         )
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = (
-            'attachment; filename="shopping_list.pdf"'
-        )
-        page = canvas.Canvas(response, pagesize=A4)
-        page.setFont('TNR', size=24)
-        page.setTitle('Список покупок')
-        page.drawString(200, 800, 'Список покупок')
-        page.setFont('TNR', size=16)
-        height = 750
-        for i, (name, data) in enumerate(cart_dict.items(), 1):
-            page.drawString(75, height, (f'{i}) {name} - {data["amount"]}'
-                                         f'{data["measurement_unit"]}'))
-            height -= 25
-        page.showPage()
-        page.save()
-        return response
+        pdf = pdf_create(ingredients)
+        return pdf
 
 
 class FavoriteViewSet(viewsets.ModelViewSet):
