@@ -14,9 +14,11 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ../frontend/:/app/result_build/
+    depends_on:
+      - db
 
   backend:
-    image: dennn88/foodgram:v1.0.0
+    image: dennn88/foodgram:v1.0.1
     restart: always
     volumes:
       - static_value:/app/static/
@@ -38,6 +40,7 @@ services:
       - media_value:/var/html/media/
     depends_on:
       - backend
+      - frontend
 
 volumes:
   static_value:
