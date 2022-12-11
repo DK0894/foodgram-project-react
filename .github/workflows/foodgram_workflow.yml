@@ -43,7 +43,7 @@ jobs:
           context: ./foodgram-project-react
           file: ./backend/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram:v1.0.0
+          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram:v1.0.1
 
   deploy:
     runs-on: ubuntu-latest
@@ -58,7 +58,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram:v1.0.0
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram:v1.0.1
             sudo docker-compose stop
             sudo docker-compose rm web
             touch .env
