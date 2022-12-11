@@ -8,13 +8,6 @@ services:
     env_file:
       - ./.env
 
-  frontend:
-    image: dennn88/foodgram_front:latest
-    volumes:
-      - result_build:/app/result_build/build/
-    depends_on:
-      - db
-
   backend:
     image: dennn88/foodgram:v1.0.2
     restart: always
@@ -25,6 +18,13 @@ services:
       - db
     env_file:
       - ./.env
+
+  frontend:
+    image: dennn88/foodgram_front:latest
+    volumes:
+      - result_build:/app/result_build/
+    depends_on:
+      - db
 
   nginx:
     image: nginx:1.19.3
