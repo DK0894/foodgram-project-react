@@ -15,7 +15,7 @@ services:
     volumes:
       - ../frontend/:/app/result_build/
 
-  web:
+  backend:
     image: dennn88/foodgram:v1.0.0
     restart: always
     volumes:
@@ -37,7 +37,7 @@ services:
       - static_value:/var/html/static/
       - media_value:/var/html/media/
     depends_on:
-      - web
+      - backend
 
 volumes:
   static_value:
