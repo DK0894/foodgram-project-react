@@ -20,7 +20,7 @@ jobs:
       - name: Push to Docker Hub
         uses: docker/build-push-action@v2
         with:
-          context: ./foodgram-project-react
+          context: ./foodgram
           file: ./backend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/foodgram:v1.0.1
