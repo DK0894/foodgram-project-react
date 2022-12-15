@@ -24,7 +24,7 @@ services:
     volumes:
       - result_build:/app/result_build/
     depends_on:
-      - db
+      - backend
 
   nginx:
     image: nginx:1.19.3
@@ -38,7 +38,6 @@ services:
       - media_value:/var/html/media/
     depends_on:
       - backend
-      - frontend
 
 volumes:
   static_value:
