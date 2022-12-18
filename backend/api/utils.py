@@ -21,9 +21,9 @@ def pdf_create(ingredients):
     height = 750
     for i, j in enumerate(ingredients, 1):
         page.drawString(75, height, (
-            f'{i}) {j["ingredient__name"]} - '
-            f'{j["total_ingredients"]}'
-            f'{j["ingredient__measurement_unit"]}'
+            f'{i}) {j ["ingredient__name"]} - '
+            f'{j ["total_ingredients"]}'
+            f'{j ["ingredient__measurement_unit"]}'
         ))
         height -= 25
     page.showPage()

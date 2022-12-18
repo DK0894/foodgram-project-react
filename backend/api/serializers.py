@@ -71,7 +71,7 @@ class RecipeListSerializer(serializers.ModelSerializer):
 
 
 class CreateRecipeSerializer(serializers.ModelSerializer):
-    ingredients = AmountIngredientsSerializer(
+    ingredients = AddAmountIngredientsSerializer(
         source='ingredient_recipes', many=True
     )
     tags = serializers.PrimaryKeyRelatedField(

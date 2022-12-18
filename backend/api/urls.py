@@ -18,4 +18,3 @@ urlpatterns = [
         {'post': 'create', 'delete': 'delete'}), name='cart'),
     path('', include(router.urls)),
 ]
-

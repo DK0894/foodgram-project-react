@@ -19,7 +19,7 @@ echo "Making migrations."
 python manage.py migrate
 
 echo "Loading demo data from fixtures.json"
-python manage.py loaddata -i ingredients.json
+python manage.py load_data
 
 echo "Collecting static files."
 python manage.py collectstatic --noinput
