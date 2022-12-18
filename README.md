@@ -51,7 +51,7 @@ sudo docker-compose exec web python manage.py load_data
 
 ### Логин и пароль администратора
 
-Login: admin@admin.admin
+Login: adm@adm.adm
 Password: 64850923m
 
 ### MIT License
