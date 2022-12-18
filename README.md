@@ -45,14 +45,14 @@ sudo docker-compose exec web python manage.py load_data
 
 ### Адрес сервера
 
-1) http://51.250.106.249/api
+1) http://51.250.106.249
 2) http://51.250.106.249/admin
 3) http://51.250.106.249/redoc
 
 ### Логин и пароль администратора
 
-Login: admin@admin.admin
-Password: 78493674n
+Login: adm@adm.adm
+Password: 64850923m
 
 ### MIT License
 
