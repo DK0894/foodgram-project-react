@@ -67,7 +67,7 @@ class BaseCreateDeleteFavoriteCartViewSet(viewsets.ModelViewSet):
         recipe_id = self.kwargs['recipes_id']
         recipe = get_object_or_404(Recipe, id=recipe_id)
         self.model.objects.create(user=request.user, recipe=recipe)
-        return Response(request, status=status.HTTP_201_CREATED)
+        return Response(request.data, status=status.HTTP_201_CREATED)
 
     def delete(self, request, *args, **kwargs):
         recipe_id = self.kwargs['recipes_id']
