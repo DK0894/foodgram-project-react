@@ -6,11 +6,13 @@ from .models import (Favorite, Ingredient, IngredientRecipe, Recipe,
 
 class IngredientRecipeInline(admin.TabularInline):
     model = IngredientRecipe
+    min_num = 1
     extra = 0
 
 
 class TagRecipeInline(admin.TabularInline):
     model = TagRecipe
+    min_num = 1
     extra = 0
 
 

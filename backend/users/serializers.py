@@ -17,12 +17,11 @@ class UserSerializer(USerializer):
 
     def get_is_subscribed(self, obj):
         user = self.context['request'].user
-        have_subscribe = Subscribe.objects.filter(
+        if user.is_anonymous:
+            return False
+        return Subscribe.objects.filter(
             user=user, following__id=obj.id
         ).exists()
-        if user.is_anonymous or not have_subscribe:
-            return False
-        return True
 
 
 class RecipeSubscribeSerializer(serializers.ModelSerializer):

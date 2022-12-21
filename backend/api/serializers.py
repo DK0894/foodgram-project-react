@@ -55,19 +55,17 @@ class RecipeListSerializer(serializers.ModelSerializer):
 
     def get_is_favorited(self, obj):
         user = self.context['request'].user
-        have_recipe = Favorite.objects.filter(
-            user=user, recipe__id=obj.id
-        ).exists()
-        if not user.is_anonymous or have_recipe:
-            return have_recipe
+        if not user.is_anonymous:
+            return Favorite.objects.filter(
+                user=user, recipe__id=obj.id
+            ).exists()
 
     def get_is_in_shopping_cart(self, obj):
         user = self.context['request'].user
-        have_in_cart = ShoppingCart.objects.filter(
-            user=user, recipe__id=obj.id
-        ).exists()
-        if not user.is_anonymous or have_in_cart:
-            return have_in_cart
+        if not user.is_anonymous:
+            return ShoppingCart.objects.filter(
+                user=user, recipe__id=obj.id
+            ).exists()
 
 
 class CreateRecipeSerializer(serializers.ModelSerializer):
@@ -90,12 +88,14 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 'В рецепте не могут отсутствовать ингредиенты!'
             )
+        print(attrs['ingredient_recipes'])
 
         ingredients_list = []
         for ingredient in attrs['ingredient_recipes']:
+            print(ingredient['ingredient']['id'])
             ingredient_id = ingredient['ingredient']['id']
             some_ingredient = Ingredient.objects.filter(id=ingredient_id)
-            if some_ingredient in ingredients_list:
+            if ingredient_id in ingredients_list:
                 raise serializers.ValidationError(
                     'В рецепте не может быть повторяющихся ингредиентов!'
                 )
@@ -107,7 +107,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     'Количество ингредиентов должно быть больше нуля!'
                 )
-            ingredients_list.append(some_ingredient)
+            ingredients_list.append(ingredient_id)
 
         tags_list = []
         if not attrs['tags']:
